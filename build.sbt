@@ -17,14 +17,17 @@ val jGraphTlibVersion = "1.5.2"
 val scalaParCollVersion = "1.0.4"
 val guavaAdapter2jGraphtVersion = "1.5.2"
 
+
 lazy val commonDependencies = Seq(
   "org.scala-lang.modules" %% "scala-parallel-collections" % scalaParCollVersion,
   "org.scalatest" %% "scalatest" % scalaTestVersion % Test,
   "org.scalatestplus" %% "mockito-4-2" % "3.2.12.0-RC2" % Test,
   "com.typesafe" % "config" % typeSafeConfigVersion,
   "ch.qos.logback" % "logback-classic" % logbackVersion,
-  "net.bytebuddy" % "byte-buddy" % netBuddyVersion
+  "net.bytebuddy" % "byte-buddy" % netBuddyVersion,
+  "org.apache.hadoop" % "hadoop-client" % "3.3.6"
 )
+
 
 lazy val root = (project in file("."))
   .settings(
@@ -33,6 +36,7 @@ lazy val root = (project in file("."))
     idePackagePrefix := Some("com.lsc"),
     libraryDependencies ++= commonDependencies
   ).aggregate(NetModelGenerator,GenericSimUtilities).dependsOn(NetModelGenerator)
+
 
 lazy val NetModelGenerator = (project in file("NetModelGenerator"))
   .settings(
@@ -48,6 +52,7 @@ lazy val NetModelGenerator = (project in file("NetModelGenerator"))
     )
   ).dependsOn(GenericSimUtilities)
 
+
 lazy val GenericSimUtilities = (project in file("GenericSimUtilities"))
   .settings(
     scalaVersion := "3.2.2",
@@ -57,10 +62,11 @@ lazy val GenericSimUtilities = (project in file("GenericSimUtilities"))
 
 
 scalacOptions ++= Seq(
-      "-deprecation", // emit warning and location for usages of deprecated APIs
-      "--explain-types", // explain type errors in more detail
-      "-feature" // emit warning and location for usages of features that should be imported explicitly
-    )
+  "-deprecation", // emit warning and location for usages of deprecated APIs
+  "--explain-types", // explain type errors in more detail
+  "-feature" // emit warning and location for usages of features that should be imported explicitly
+)
+
 
 compileOrder := CompileOrder.JavaThenScala
 test / fork := true
@@ -68,8 +74,10 @@ run / fork := true
 run / javaOptions ++= Seq(
   "-Xms8G",
   "-Xmx100G",
+  "-XX:+UnlockExperimentalVMOptions",
   "-XX:+UseG1GC"
 )
+
 
 Compile / mainClass := Some("com.lsc.Main")
 run / mainClass := Some("com.lsc.Main")

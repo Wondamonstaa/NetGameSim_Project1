@@ -5,6 +5,7 @@ import NetGraphAlgebraDefs.NetModelAlgebra.{actionType, outputDirectory}
 import NetGraphAlgebraDefs.{GraphPerturbationAlgebra, NetGraph, NetModelAlgebra}
 import NetModelAnalyzer.Analyzer
 import Randomizer.SupplierOfRandomness
+import Utilz.NGSConstants.{CONFIGENTRYNAME, config, obtainConfigModule}
 import Utilz.{CreateLogger, NGSConstants}
 import com.google.common.graph.ValueGraph
 
@@ -13,10 +14,13 @@ import scala.concurrent.duration.*
 import scala.concurrent.{Await, ExecutionContext, Future}
 import com.typesafe.config.ConfigFactory
 import guru.nidi.graphviz.engine.Format
+import org.apache.hadoop.fs.Path
 import org.slf4j.Logger
 
 import java.net.{InetAddress, NetworkInterface, Socket}
 import scala.util.{Failure, Success}
+import com.typesafe.config.{Config, ConfigFactory}
+import com.lsc.ArgumentParser
 
 object Main:
   val logger:Logger = CreateLogger(classOf[Main.type])
@@ -73,3 +77,73 @@ object Main:
         case Right(value) =>
           logger.info(s"Diff yaml file ${outputDirectory.concat(outGraphFileName.concat(".yaml"))} contains the delta between the original and the perturbed graphs.")
           logger.info(s"Done! Please check the content of the output directory $outputDirectory")
+
+
+    logger.info("Please, specify the required arguments for input and output paths: " +
+      "name and path of the original graph, name and path of the perturbed graph, " +
+      "name and path of the output file for the Node csv file, name and path of the output file for the Edges csv file, " +
+      "name and path of the output file for the Node csv file after sharding, name and path of the output file for the Eges csv file after sharding, " +
+      "input Node.csv directory  SimRankMapReduce, input Edge.csv directory for EdgesSimilarityMapReduce, and the corresponding output directories for both.")
+    logger.info("Creating and object of ArgumentParser class.")
+    logger.info("Loading file configurations.")
+
+    import com.typesafe.config.ConfigFactory
+    val config: Config = ConfigFactory.load()
+    val globalConfig: Config = obtainConfigModule(config, CONFIGENTRYNAME)
+    
+    val originalGraphFileName = globalConfig.getString("originalGraphFileName")
+    val originalGraphPath = globalConfig.getString("originalGraphPath")
+    val perturbedGraphFileName = globalConfig.getString("perturbedGraphFileName")
+    val perturbedGraphPath = globalConfig.getString("perturbedGraphPath")
+    val filePath = globalConfig.getString("nodesCSVOutputDirectory")
+    val filePath1 = globalConfig.getString("edgesCSVOutputDirectory")
+    val output = globalConfig.getString("nodeShardsOutputDirectory")
+    val output1 = globalConfig.getString("edgeShardsOutputDirectory")
+    val inputPathS = globalConfig.getString("simRankInputPath")
+    val outputPathS = globalConfig.getString("simRankOutputPath")
+    val inputPathE = globalConfig.getString("edgeSimInputPath")
+    val outputPathE = globalConfig.getString("edgeSimOutputPath")
+
+    //The following array contains the arguments that are passed to the ArgumentParser class
+    val argsArray = Array(
+      originalGraphFileName,
+      originalGraphPath,
+      perturbedGraphFileName,
+      perturbedGraphPath,
+      filePath,
+      filePath1,
+      output,
+      output1,
+      inputPathS,
+      outputPathS,
+      inputPathE,
+      outputPathE
+    )
+
+    //An object of ArgumentParser class is created
+    val argumentParser = new ArgumentParser()
+    val parsedArguments = argumentParser.parse(argsArray)
+
+    //Check if the args are valid
+    parsedArguments match {
+      case Some((originalGraphFileName, originalGraphPath, perturbedGraphFileName, perturbedGraphPath, filePath, filePath1, output, output1, inputPathSimRankMR, outputPathSimRankMR, inputPathEdgeSimMR, outputPathEdgeSimMR)) =>
+
+        logger.info(s"Original Graph File Name: $originalGraphFileName")
+        logger.info(s"Original Graph Path: $originalGraphPath")
+        logger.info(s"Perturbed Graph File Name: $perturbedGraphFileName")
+        logger.info(s"Perturbed Graph Path: $perturbedGraphPath")
+        logger.info(s"Nodes CSV Output Directory: $filePath")
+        logger.info(s"Edges CSV Output Directory: $filePath1")
+        logger.info(s"Node Shards Output Directory: $output")
+        logger.info(s"Edge Shards Output Directory: $output1")
+        logger.info(s"Input Path for SimRank MapReduce: $inputPathSimRankMR")
+        logger.info(s"Output Path for SimRank MapReduce: $outputPathSimRankMR")
+        logger.info(s"Input Path for Edge Similarity MapReduce: $inputPathEdgeSimMR")
+        logger.info(s"Output Path for Edge Similarity MapReduce: $outputPathEdgeSimMR")
+
+      case None =>
+
+        logger.info("Invalid arguments provided.")
+    }
+
+
