@@ -11,7 +11,7 @@ AWS EMR Deployment YouTube link: EDIT
 
 ---
 
-## How to run the project
+## How to Run the Project:
 1) Start by downloading the project repository from Git.
 2) Navigate to the NetGameSim directory: use your terminal or command prompt to navigate to the "NetGameSim" directory within the downloaded project folder.
 3) In your terminal, run the following command to clean, compile, and execute the project: `sbt clean compile run`.
