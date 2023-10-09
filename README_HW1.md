@@ -3,7 +3,7 @@
 ### UIN: 656339218
 ### NetID: kbara5
 
-Repo for the MapReduce Homework-1 for CS441-Fall2023
+Repo for the NetGameSim Project 1 for CS 441 Fall 2023
 
 ---
 
