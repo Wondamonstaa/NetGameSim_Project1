@@ -17,7 +17,7 @@ AWS EMR Deployment YouTube link: EDIT
 3) In your terminal, run the following command to clean, compile, and execute the project: `sbt clean compile run`.
 4) To run tests and ensure the code's functionality, use the following command: `sbt clean test`.
 5) If you need to create a .jar file for your project, execute the following command: `sbt clean assembly`. The resulting jar will be placed in __NetGameSim/target/scala-3.2.2/netmodelsim.jar__
-6) If you prefer using IntelliJ for development: a) Import the project into IntelliJ IDE.  b) Build the project.  c) Create a "configuration" for the Main.scala file.  d) Set the configuration's arguments to be the input and output folders, separated by a space. NB: to run the project properly, a user, i.e. you, should specify the input/output paths in the application.conf file.
+6) If you prefer using IntelliJ for development: a) Import the project into IntelliJ IDE. b) Build the project. c) Create a "configuration" for the Main.scala file. d) Set the configuration's arguments to be the input and output folders, separated by a space. NB: to run the project properly, a user, i.e. you, should specify the input/output paths in the application.conf file.
 8) Ensure that your local input/output folder has the necessary permissions to allow the program to read from and write to it. You can check and adjust folder permissions by right-clicking on the project directory, selecting "Properties," and navigating to the "Security" tab. Make sure that the group "Users" has both "Read" and "Write" permissions.
 9) Before running the program, ensure that Hadoop is running on your machine. The program may depend on Hadoop, so it's essential to have it set up and running correctly.
 ---
