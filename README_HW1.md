@@ -1,4 +1,4 @@
-![NetGameSimfileName ngs perturbed](https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/c0c7d20a-5da5-405f-81b2-6f5d484c1ec4)# CS 441 Project 1 Fall 2023
+# CS 441 Project 1 Fall 2023
 ## Kiryl Baravikou
 ### UIN: 656339218
 ### NetID: kbara5
