@@ -87,5 +87,4 @@ The driver of this class is the runEdgeSimMR(inputPathE: String, outputPathE: St
 2) The program can handle multiple files in the same input folder if the user wishes to split the file, but it cannot handle input files at different locations. 
 3) The user must have the ability to grant Read/Write permissions to the group Users for the LogFileGenerator project folder. This usually requires Administrator access.
 4) The functionality for changing the name and extension of the output file works only when running locally (i.e., it does not change the name and extension in S3 when running the program on AWS EMR).
-5) 5
 
