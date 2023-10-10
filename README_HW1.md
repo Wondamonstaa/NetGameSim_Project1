@@ -56,6 +56,9 @@ As the main class, I chose the Main object, implemented by Dr. Mark Grechanik. T
 
 DataConverter object is responsible for converting the graphs into a human-friendly readable format, and for the subsequent sharding of the generated files for the purpose of parallel processing in Map/Reduce model. After receiving the serialized graphs as arguments, the processFile() function begins processing them simultaneously by calling the processFilesToCsv() and processEdgesToCsv() functions to access nodes and edges of the two graphs via using nodes() and edges() function calls respectively. Subsequently, shuffling of objects occurs with each other in order to create all kinds of combinations that will be used as arguments when calculating similarities via SimRank in the Map/Reduce. After generating combinations, the sharder() function is called, which splits the resulting files into shards, the size of which depends on the argument specified when calling this function. All received shards are saved in two specified folders for user convenience.
 
+#Sample output:
+
+<img width="1256" alt="Screenshot 2023-10-10 at 10 16 48 AM" src="https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/90ef735c-c81b-46d7-9855-f1d60af66d49">
 
 3. SimRankMapReduce: 
 
@@ -84,8 +87,8 @@ The following object serves its primary role as a helper and the basis for imple
 
 
 ## Limitations:
-1) If the user is running the program locally, they must have Java 8 (or above), sbt 1.6 and Hadoop 3.3.6 installed.
-2) The program can handle multiple files in the same input folder if the user wishes to split the file, but it cannot handle input files at different locations. 
-3) The user must have the ability to grant Read/Write permissions to the group Users for the LogFileGenerator project folder. This usually requires Administrator access.
-4) The functionality for changing the name and extension of the output file works only when running locally (i.e., it does not change the name and extension in S3 when running the program on AWS EMR).
+1) For local program execution, the user needs to have Java 8 or a higher version, sbt 1.6, and Hadoop 3.3.6 installed.
+2) The program supports processing multiple files within the same input folder if the user chooses to split the files, but it cannot manage input files from different locations. 
+3) The user should possess the capability to provide Read/Write permissions to the "Users" group for the LogFileGenerator project folder. This typically requires Administrator-level access.
+4) The feature for altering the name and extension of the output file is effective only during local execution. In other words, it does not modify the name and extension in the case of program execution on AWS EMR, particularly in S3 Bucket.
 
