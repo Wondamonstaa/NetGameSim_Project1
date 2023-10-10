@@ -58,6 +58,8 @@ DataConverter object is responsible for converting the graphs into a human-frien
 
 # Sample output:
 
+____________________
+
 <img width="1256" alt="Screenshot 2023-10-10 at 10 16 48 AM" src="https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/90ef735c-c81b-46d7-9855-f1d60af66d49">
 
 ____________________
