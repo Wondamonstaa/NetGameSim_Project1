@@ -117,6 +117,10 @@ The following object serves its primary role as a helper and the basis for imple
 
 ## Test Cases
 
+The tests can be run using 'sbt clean test' command or by directly invoking the class SimRankTest, located under the following path: src/main/Test/SimRankTest.scala
+
+In essence, the battery of tests conducted evaluates the performance and functionality of the SimRank class, alongside the sharding function, assessing their proficiency in executing tasks accurately and effectively. These tests serve as a robust validation mechanism, ensuring that both components operate seamlessly and in accordance with their intended objectives.
+
 
 ## Limitations:
 1) For local program execution, the user needs to have Java 8 or a higher version, sbt 1.6, and Hadoop 3.3.6 installed.
