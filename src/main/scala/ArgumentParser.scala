@@ -65,7 +65,7 @@ class ArgumentParser {
     import com.lsc.EdgesSimilarityMapReduce.MyReducer
 
     logger.info("Running functionality two for SimRank")
-    SimRankMapReduce.runSimRankMR(inputPathS, outputPathS)
+    //SimRankMapReduce.runSimRankMR(inputPathS, outputPathS)
 
     logger.info("Running functionality three for traceability links calculation")
     EdgesSimilarityMapReduce.runEdgeSimMR(inputPathE, outputPathE)

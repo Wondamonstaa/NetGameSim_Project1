@@ -81,6 +81,7 @@ run / javaOptions ++= Seq(
 
 Compile / mainClass := Some("com.lsc.Main")
 run / mainClass := Some("com.lsc.Main")
+test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
 
 val jarName = "netmodelsim.jar"
 assembly/assemblyJarName := jarName

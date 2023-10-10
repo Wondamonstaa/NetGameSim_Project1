@@ -238,10 +238,15 @@ object DataConverter {
 
     // Function to calculate the cost of an edge
     def calculateEdgeCost(netGraph: NetGraph, edge: EndpointPair[NodeObject]): Float = {
+      
+      //Obtain the source and target nodes of the edge to calculate the cost
       val edgeCostOptional = netGraph.sm.edgeValue(edge.source(), edge.target())
       if (edgeCostOptional.isPresent) {
+        
+        //Return the cost of the edge if it exists
         edgeCostOptional.get().cost.toFloat
-      } else {
+      } 
+      else {
         Float.PositiveInfinity
       }
     }

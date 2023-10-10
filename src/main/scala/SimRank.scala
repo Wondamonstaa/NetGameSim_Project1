@@ -6,7 +6,6 @@ import Utilz.CreateLogger
 import guru.nidi.graphviz.model.{Node, Graph as DotGraph}
 import NetGraphAlgebraDefs.*
 import org.slf4j.Logger
-
 import scala.annotation.tailrec
 import scala.collection.JavaConverters.*
 import com.google.common.graph.EndpointPair.*
@@ -20,7 +19,6 @@ import org.apache.hadoop.util.*
 import org.apache.hadoop.mapred.*
 import org.apache.hadoop.fs.{FileStatus, FileSystem, Path}
 import org.apache.hadoop.conf.Configuration
-
 import java.text.DecimalFormat
 
 object SimRank {
@@ -70,15 +68,26 @@ object SimRank {
     Math.abs(original - perturbed) <= threshold
   }
 
-  // Function to calculate F1-score
+  /*Function to calculate F1-score:
+  It is calculated from the precision and recall of the test,
+  where the precision is the number of true positive results divided by the number of all positive results,
+  including those not identified correctly, and the recall is the number of true positive results divided by the number of all samples that should have been identified as positive.
+   */
   def calculateF1Score(tp: Double, fp: Double, fn: Double): Double = {
     val precision = tp / (tp + fp)
     val recall = tp / (tp + fn)
-    if (precision + recall == 0) 0.0
-    else 2.0 * (precision * recall) / (precision + recall)
+
+    if (precision + recall == 0) {
+      //The case where precision + recall is zero
+      0.0
+    }
+    else {
+      2.0 * (precision * recall) / (precision + recall)
+    }
   }
 
-  // Function to calculate specificity
+
+  // Function to calculate  => where specificity is the percentage of true negatives
   def calculateSpecificity(tn: Double, fp: Double): Double = {
     tn / (tn + fp)
   }
@@ -344,9 +353,9 @@ object SimRank {
     FP = updatedFP
 
     // Thresholds for Modification Detection
-    val modificationThreshold = 0.9 // Adjust as needed
-    val candidateThreshold = 0.9 // Adjust as needed
-    val removalThreshold = 0.84 // Adjust as needed
+    val modificationThreshold = 0.9
+    val candidateThreshold = 0.81
+    val removalThreshold = 0.75
 
     // Thresholds for Traceability Links
     val correctThreshold = 0.9
@@ -356,7 +365,7 @@ object SimRank {
     logger.info("Calculating the Number of Nodes compared with Original Node exceeded the Threshold indicating Modification")
     val above = similarityScore.count(_ > modificationThreshold)
     logger.info("Calculating If Any Score from SimRank Matched the Threshold Indicating Node was Found")
-    val even = similarityScore.count(_ == candidateThreshold)
+    val even = similarityScore.count(_.equals(candidateThreshold))
     logger.info("Calculating the Number of Nodes Compared with Original Node were under the Threshold indicating Removed")
     val below = similarityScore.count(_ < removalThreshold)
 
@@ -364,7 +373,6 @@ object SimRank {
     val WTL = similarityScore.count(_ < wrongAcceptThreshold) // Number of wrong TLs accepted
     val DTL = similarityScore.count(_ < correctThreshold) // Number of correctly discarded TLs
     val ATL = even + above// Number of correctly accepted TLs
-
 
     // The statistics about traceability links
     val GTL: Double = DTL + ATL // Total number of good traceability links
@@ -390,14 +398,14 @@ object SimRank {
 
     var info = ""
 
-    if (even == 0.0) {
-      info = s"Node-Edge $key: Matched in Perturbed Graph"
+    if (even.equals(0.0)) {
+      info = s"Node-Edge $key: Matched in P-Graph"
     }
-    else if (above > 0.0) {
-      info = s"Node-Edge $key: Modified in Original Graph"
+    if (above > 0.0) {
+      info = s"Node-Edge $key: Modified in O-Graph"
     }
     else {
-      info = s"Node-Edge $key: Removed in Perturbed Graph"
+      info = s"Node-Edge $key: Removed in P-Graph"
     }
 
     //Calculate F1 -score and specificity
@@ -409,8 +417,7 @@ object SimRank {
       s" $CTL \nWTL: $WTL \nDTL: $DTL \nATL: $ATL\nACC: $ACC \nBTLR: $BTLR \nPrecision: $precision\nRecall:" +
       s" $recall\nF1-Score: $f1Score\n\n"
 
-    logger.info("Outputting Information to a Csv File")
-    //val outputMessage = s"Node Modified: $above, Node Found Unchanged: $even, Less than 0.9: $below"
+    logger.info("Outputting Information to the CSV File")
 
     outputMessage
   }

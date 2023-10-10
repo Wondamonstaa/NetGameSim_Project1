@@ -75,9 +75,6 @@ object SimRankMapReduce {
   }
 
   def main(args: Array[String]): Unit = {
-
-    logger.info("Starting the main method")
-
   }
 
 
