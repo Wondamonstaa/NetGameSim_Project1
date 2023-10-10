@@ -115,6 +115,7 @@ ________________
 The following object serves its primary role as a helper and the basis for implementing the methods in other objects, including SimRank.
 
 
+## Test Cases
 
 
 ## Limitations:
