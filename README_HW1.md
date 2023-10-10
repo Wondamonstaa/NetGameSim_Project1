@@ -61,6 +61,7 @@ DataConverter object is responsible for converting the graphs into a human-frien
 <img width="1256" alt="Screenshot 2023-10-10 at 10 16 48 AM" src="https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/90ef735c-c81b-46d7-9855-f1d60af66d49">
 
 
+
 3. SimRankMapReduce: 
 
 The purpose of this object is to construct a Map/Reduce model, which operates exclusively on <key, value> pairs, that is, the framework views the input to the job as a set of <key, value> pairs and produces a set of <key, value> pairs as the output of the job, conceivably of different types. Inside the SimRankMapReduce object, an object of the SimRank class is created, which allows you to access methods for highlighting the similarities between two graphs and at the same time reducing the code pollution of the SimRankMapReduce object. Inside Mapper, the main method for the initial processing of received files is the map function. I use LongWritable and Text respectively as the input key and value since the CSV shard is read line by line. The output values for <key, value> pairs are Text and DoubleWritable. Inside map(), while reading a file line by line, its similarity rank is calculated via invoking calculateSimRank() function by passing each line of the processed CSV file as an argument. Thus, each line of the file is processed, followed by registration of NodeID and its similarity score for further processing. The program transfers these values to Reduce, where the final processing of the received data takes place. 
