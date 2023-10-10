@@ -101,6 +101,15 @@ This component serves the purpose of establishing a Map/Reduce model that exclus
 In the Mapper phase, the primary method for the initial processing of input files is the map function. LongWritable and Text are used as the input key and value types, as we process the CSV file line by line. The output values for <key, value> pairs consist of Text and DoubleWritable. Within the map() function, while processing each line of the file, we calculate its similarity rank by invoking the calculateEdgeSimRank() function with each line of the processed CSV file as an argument. As a result, each line of the file undergoes processing, accompanied by the registration of NodeID and its corresponding similarity score for subsequent steps. These values are then transmitted to the Reduce phase, where the final processing of the received data unfolds. The driver of this class is the runEdgeSimMR(inputPathE: String, outputPathE: String) method, which takes the path to the directory with shards for edges, and the output path for the produced result as the second argument.
 
 
+_______________
+
+# Sample output:
+
+<img width="197" alt="Screenshot 2023-10-10 at 10 46 20 AM" src="https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/17c0556c-b977-4310-86c0-eb75f63ac190">
+
+________________
+
+
 6. NodeSimilarity:
 
 The following object serves its primary role as a helper and the basis for implementing the methods in other objects, including SimRank.
