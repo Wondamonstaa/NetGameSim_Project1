@@ -123,6 +123,7 @@ In essence, the battery of tests conducted evaluates the performance and functio
 
 
 ## Limitations:
+
 1) For local program execution, the user needs to have Java 8 or a higher version, sbt 1.6, and Hadoop 3.3.6 installed.
 2) The program supports processing multiple files within the same input folder if the user chooses to split the files, but it cannot manage input files from different locations. 
 3) The user should possess the capability to provide Read/Write permissions to the "Users" group for the LogFileGenerator project folder. This typically requires Administrator-level access.
@@ -131,5 +132,8 @@ In essence, the battery of tests conducted evaluates the performance and functio
 
 ## Note for Dr. Mark Grechanik and Utsav
 
+___________
+
 The final part of this assignment requires us to compare the produced results with the results produced by Dr. Mark in the YAML file to estimate the goodness of our algorithm. Carrying out this comparison makes sense only if the algorithm is mostly free of gross errors, which minimizes the chance of obtaining an inaccurate result. In my case, the algorithm is imprecise and can sometimes be confusing or confusing when analyzing the generated data. When writing the algorithm, due to the lack of a clear understanding of how exactly to work with this kind of data, and due to lack of experience, I did not take into account a number of important factors that play a key role in determining the percentage of similarity between nodes and edges of both graphs. Taking into account all the above, I conclude that my algorithm is inaccurate and cannot be used at this stage for the purpose of accurately comparing the results obtained with the results of Dr. Mark. The implemented algorithm still needs careful refinement and additional improvements in order to increase the accuracy of calculations.
+___________
 
