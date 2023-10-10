@@ -1,148 +1,143 @@
-Network Graph Simulation (NetGameSim) Experimental Platform
-=======================
-#### The goal of this experimental plaform is to allow users to generate large-scale random graphs and to create random perturbations of these graphs with precise records of what nodes and edges were perturbed. The toolkit allows the users to perform random walks on the graphs with the cost model for exploring the graph with these random walks. The functionality of this platform includes various algorithms on the graphs, graph visualization, walk cost models and (de)serialization of the generated graphs and the perturbed graphs deltas, i.e., the differences between a generated graphs and its perturbed counterpart. 
-![A generated graph with 300 nodes](./outputs/Graph300Nodes.png)
-This is an image of the generated graph with 300 nodes.
+# CS 441 Project 1 Fall 2023
+## Kiryl Baravikou
+### UIN: 656339218
+### NetID: kbara5
 
-Overview
+Repo for the NetGameSim Project 1 for CS 441 Fall 2023
+
 ---
-* NetGameSim uses [Google's Guava](https://github.com/google/guava) and [JGraphT](https://github.com/jgrapht/jgrapht) libraries for graph manipulations;
-* [Scalatest](https://github.com/scalatest/) dependency is used for testing;
-* [Typesafe configuration](https://github.com/lightbend/config#readme) dependency is used to manage configuration options in [application.conf](GenericSimUtilities/src/main/resources/application.conf);
-* [Logback classic](https://mvnrepository.com/artifact/ch.qos.logback/logback-classic) dependency is used for logging;
-* For visualization NetGameSim uses [GraphViz](https://graphviz.org/download/) package that should be installed independently;
-* NetGameSim also uses a [visualization library](https://github.com/nidi3/graphviz-java) for invoking GraphViz programmatically;
-* NetGameSim takes only one command-line parameter, i.e., the name of the output file that is used to serialize a generated graph and its perturbed equivalent as well as GraphViz visualization files;
-* Each generated graph contains an extra node that is called the ***initial node***, since it may be convenient for certain type of analyses to assume an existing entry point for a simulated system;
-* Scala parallel collection is used to parallelize graph generation and it achieves 10x speedup on multicore processor computers; it's recommended to use at least a Quad-core CPU with a minimum of 8 GB of RAM;
-* NetGameSim has been tested with Scala 3.x and the JVM 1.8 to 19. As an IntelliJ project it can be loaded and built within the IDE.
-* To build NetGameSim from the command line [SBT](https://www.scala-sbt.org/release/docs/Setup.html), [Scala](https://www.scala-lang.org/download/) and a [JDK/JVM](https://docs.oracle.com/en/java/javase/) should be installed and configured.
-* External plugins for the IntelliJ IDE settings and for creating a jar file are specified in ```plugins.sbt``` under the sources root project and other plugins can be substituted as needed:
-```scala
-addSbtPlugin("org.jetbrains.scala" % "sbt-ide-settings" % "1.1.1")
-addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.0")
-```
 
-Installing, Compiling and Running NetGameSim 
-===
-* Once all prerequisites are met, clone [NetGameSim](https://github.com/0x1DOCD00D/NetGameSim) using the command ```git clone```;
-* Once the repository is cloned, assuming its local path is the root directory ```/path/to/the/cloned/NetGameSim``` open a terminal window and switch to the directory ```cd /path/to/the/cloned/NetGameSim```;
-* Build the project using the command ```sbt clean compile assembly``` that results in the executable file located under ```target/scala-3.2.2/netmodelsim.jar``` relative to the root directory.
-* Alternatively, you can load the project into IntelliJ and compile and run it using the main entry point in [Main.scala](src/main/scala/Main.scala);
-* You should make sure that the Java version that is used to compile this project matches the JVM version that is used to run the generated program jar from the command line, otherwise you may receive a variant of the following error message: "Exception in thread "main" java.lang.UnsupportedClassVersionError: org/jgrapht/Graph has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0." A quick check using the command ```java -version``` shows "openjdk version 1.8.0_292" meaning that we should switch to a higher version of the JVM. First, we check to see what JDKs are installed using the command ```/usr/libexec/java_home -V``` that outputs a list of versions like the following.
-```shell
-Matching Java Virtual Machines (6):
-19.0.1 (x86_64) "Oracle Corporation" - "OpenJDK 19.0.1" /Users/drmark/Library/Java/JavaVirtualMachines/openjdk-19.0.1/Contents/Home
-18.0.1.1 (x86_64) "Oracle Corporation" - "OpenJDK 18.0.1.1" /Users/drmark/Library/Java/JavaVirtualMachines/openjdk-18.0.1.1/Contents/Home
-17.0.1 (x86_64) "Oracle Corporation" - "OpenJDK 17.0.1" /Users/drmark/Library/Java/JavaVirtualMachines/openjdk-17.0.1/Contents/Home
-14.0.1 (x86_64) "Oracle Corporation" - "Java SE 14.0.1" /Library/Java/JavaVirtualMachines/jdk-14.0.1.jdk/Contents/Home
-11.0.20.0-m1 (x86_64) "IBM Corporation" - "IBM Semeru Runtime Open Edition 11" /Users/drmark/Library/Java/JavaVirtualMachines/semeru-11.0.20/Contents/Home
-1.8.0_292 (x86_64) "AdoptOpenJDK" - "AdoptOpenJDK 8" /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
-```
-To choose a higher version of the JVM we execute the following command ```export JAVA_HOME=`/usr/libexec/java_home -v 19.0.1` ``` that resolves the issue.
-* Once built you can execute the program using the following command ```java -Xms2G -Xmx30G -jar -DNGSimulator.NetModel.statesTotal=300  target/scala-3.2.2/netmodelsim.jar fileName``` where you can modify the memory allocation values for the command line arguments Xms and Xmx. 
-* If ```fileName``` is omitted from the command line then the default name ```NetGraph_<time stamp>.ngs``` will be used;
-* Configuration options in ```application.conf``` can be overwritten using the command line as it is shown with the option ```-D``` applied to the configuration option ```NGSimulator.NetModel.statesTotal```.
+AWS EMR Deployment YouTube link: EDIT
 
-Running NetGameSim results in many log messages showing the progress of the execution and hopefully, if no error messages are shown then the last log entries can look like the following.
-```log
-11:51:08.894 [main] INFO  - Successfully persisted the graph to /Users/drmark/github/NetGameSim/outputs/Graph300Nodes.ngs.perturbed
-11:51:08.894 [main] INFO  - Generating DOT file for graph with 287 nodes for visualization as /Users/drmark/github/NetGameSim/outputs/Graph300Nodes.ngs.perturbed.dot
-11:51:08.938 [main] INFO  - Successfully rendered the graph to /Users/drmark/github/NetGameSim/outputs/Graph300Nodes.ngs.perturbed.dot
-11:51:08.938 [main] INFO  - A graph image file for the perturbed graph can be generated using the following command: sfdp -x -Goverlap=scale -Tpng /Users/drmark/github/NetGameSim/outputs/Graph300Nodes.ngs.perturbed.dot > /Users/drmark/github/NetGameSim/outputs/Graph300Nodes.ngs.perturbed.png
-11:51:08.941 [main] INFO  - 47 nodes and 138 edges have been perturbed
-11:51:08.941 [main] INFO  - There are 15 modified nodes, 9 added nodes and 23 removed nodes.
-11:51:08.941 [main] INFO  - There are 11 modified edges, 30 added edges and 97 removed edges.
-11:51:08.945 [main] INFO  - Done! Please check the content of the output directory /Users/drmark/github/NetGameSim/outputs/
-```
-This last command is not run by NetGameSim intentionally. For large graphs it takes a while to generate its image and some users may avoid it altogether. Also, some parameters of the command ```sfdp``` may be different depending on the desired quality of the generated images and the capabilities of the computer used to generate images. This functionality is not critical for NetGameSim.
+---
 
-Building NetGameSim from the command line results in the following output that can vary depending on the versions of Java, Scala and Sbt used to compile the project and generate the assembly jar.
-![Command line console output](CommandLineBuildOutput.png)
+## How to Run the Project:
+1) Start by downloading the project repository from Git.
+2) Navigate to the NetGameSim directory: use your terminal or command prompt to navigate to the "NetGameSim" directory within the downloaded project folder.
+3) In your terminal, run the following command to clean, compile, and execute the project: `sbt clean compile run`.
+4) To run tests and ensure the code's functionality, use the following command: `sbt clean test`.
+5) If you need to create a .jar file for your project, execute the following command: `sbt clean assembly`. The resulting jar will be placed in __NetGameSim/target/scala-3.2.2/netmodelsim.jar__
+6) If you prefer using IntelliJ for development: a) Import the project into IntelliJ IDE. b) Build the project. c) Create a "configuration" for the Main.scala file. d) Set the configuration's arguments to be the input and output folders, separated by a space. NB: to run the project properly, a user, i.e. you, should specify the input/output paths in the application.conf file.
+8) Ensure that your local input/output folder has the necessary permissions to allow the program to read from and write to it. You can check and adjust folder permissions by right-clicking on the project directory, selecting "Properties," and navigating to the "Security" tab. Make sure that the group "Users" has both "Read" and "Write" permissions.
+9) Before running the program, ensure that Hadoop is running on your machine. The program may depend on Hadoop, so it's essential to have it set up and running correctly.
+---
 
-For more detailed code walkthru please watch this video.
-[![NetGameSim Overview](http://img.youtube.com/vi/6fdazJBkdjA/0.jpg)](http://www.youtube.com/watch?v=6fdazJBkdjA)
+## Requirements:
 
-Configuration
-========
-All NetGameSim's configuration options are defined in [application.conf] under ```GenericSimUtilities/src/main/resources/application.conf``` where configuration option file for logging ```logback.xml``` is also located. Users can provide their own external ```application.conf``` to execute ```netmodelsim.jar``` from command line by using the JVM option ```-D``` as in [-Dconfig.file=path/to/config-file](https://github.com/lightbend/config).
+The goal of the project is to create a program for parallel distributed processing of large graphs to produce matching statistics about generated graphs and their perturbed counterparts. The following core functionalities must be met:
 
-Below if an example of the configuration file that contains the main configuration entry, ***NGSimulator*** that in turn contains two parameters and three configuration subentries.
+1. Statistics Generation: compute a YAML or CSV file that displays the distribution of nodes and edges based on their similarities, calculated using a custom formula.
+2. Likelihood Calculation: determine the likelihood that a node or edge was modified, added, or removed in the perturbed graph, or if it remained unchanged. 
+3. Custom Graph Matching Algorithm: develop a uniquely fine-tuned graph matching algorithm to make determinations about modifications.
+4. Comparison with Golden Set YAML: compare each detected modification with the golden set of changes generated by NetGraphSim when creating a perturbed graph.
+5. Algorithm Evaluation: assess the goodness of your algorithm, similar to precision and recall ratios, based on experimentation and results.
 
-```hocon
-NGSimulator {
-    seed = 100
-    outputDirectory = "/Users/drmark/github/NetGameSim/outputs"
-    NetModel {
-        distanceSpreadThreshold = 0.05
-        numberOfExperiments = 100
-        perturbationCoefficient = 0.3
-        dissimulationCoefficient = 0.15
-        distanceCoefficient = 0.2
-        edgeProbability = 0.001
-        statesTotal = 100
-        desiredReachabilityCoverage = 1.0
-        numberOfWalks = 50
-        maxBranchingFactor = 7
-        maxDepth = 5
-        maxProperties = 20
-        propValueRange = 100
-        actionType = 20
-        actionRange = 10
-        connectedness = 2
-        maxWalkPathLengthCoeff = 2
-        graphWalkTerminationPolicy = ${NGSimulator.Constants.MaxPathLength}
-        graphWalkNodeTerminationProbability = 0.001d
-    }
-    CostRewards {
-        Budget = 2700.0
-        costOfDetection = 0.2d
-        serviceRewardProbability = 0.3
-        serviceReward = 10d
-        servicePenalty = 3d
-        targetNodeValue = 5
-        targetNodeLowPenalty = 1
-        targetNodeHighPenalty = 2
-    }
-    Constants {
-       MaxPathLength  = "maxpathlength"
-       UntilCycle = "untilcycle"
-       All = "all"
-    }
-}
-```
-A typical accept/reject algorithm for simulation is based on the following simple algorithm. A threshold value, T is specified between zero and one. If a randomly generated value based on the uniform distribution within the same range, zero to one is less or equal to T then a desired random action is performed, e.g., adding a node to a random graph, o/w this action is discarded.
-* The parameter, ***seed*** specifies the seed value for the random generator. Currently, ```java.util.concurrent.ThreadLocalRandom``` is used along with ```Random``` to take advantage of thread isolation to avoid the overhead associated with concurrency. As the documentation states, [the concurrent use of the same java.util.Random instance across threads may encounter contention and consequent poor performance](https://docs.oracle.com/javase/8/docs/api/java/util/Random.html). As a result this parameter is ignored in parallel graph generation and an additional parameter should be added to regulate the level of parallelism and reproducibility.
-* The parameter ***outputDirectory*** specifies the path where output files are stored and it should be created before NetGameSim is run. Adding a file separator to the end of the path is optional.
-* Configuration subentry, ***NetModel*** contains parameters that guide graph generation.
-* The parameter ***distanceSpreadThreshold*** designates the desired threshold for the difference between the length of the max path from the ***initial node*** to the min path from the same node. This parameter is needed for certain types of simulations that involve path lengths.
-* The parameter ***numberOfExperiments*** is used to specify how many experiments of some type to run automatically using this platform that collects the experimental data automatically. This functionality is still under development.
-* The parameter ***edgeProbability*** specifies the probability that an edge can be added between a pair of nodes when constructing a random graph.
-* The parameter ***perturbationCoefficient*** specifies the probability of modifying a graph element. 
-* The parameter ***dissimulationCoefficient*** specify the probability that some parameters of the existing graph element may be modified.
-* The parameter ***distanceCoefficient*** is used to determine to what graph nodes to apply perturbations. Suppose that the max distance is 5 and the distance coefficient is 0.2. Then the min distance to apply perturbation is 5*0.2 = 1.
-* The parameter ***statesTotal*** specifies the number of nodes or states in a random graph.
-* The parameter ***desiredReachabilityCoverage*** is a real number between zero and one that specifies the ratio of the nodes in the generated random graph that should be reached from the ***initial node***.
-* The parameter ***numberOfWalks*** specifies the number of random walks to perform on the generated graph as part of each experiment.
-* The parameters ***maxBranchingFactor***, ***maxDepth***, ***maxProperties***, ***propValueRange***, ***actionType*** and ***actionRange*** designate a representation of the organization tree for subcomponents of each generated node. In NetGameSim each node is abstracted as a tree representation of some internal organization, e.g., a file system for a computing node in a computer network.  
-* The parameter ***connectedness*** specifies to how many other graph nodes the ***initial node*** should be connected by edges.
-* The parameter ***maxWalkPathLengthCoeff*** specifies the maximum length of the walk as maxWalkPathLengthCoeff * statesTotal.
-* The parameter ***graphWalkTerminationPolicy*** specifies how a random walk should be terminated: by reaching the maximum path length determined in ***maxWalkPathLengthCoeff***, by proceeding until the first cycle is reach or by using both criteria.
-* The parameter ***graphWalkNodeTerminationProbability*** specifies the probability that a random walk can be terminated abruptly before the criteria in the parameter ***graphWalkTerminationPolicy*** is satisfied.
-* The parameter subspace ***CostRewards*** is ignored for now.
+Other Requirements:
+1) The output files should be in the format of .csv or any other human-readible format.
+2) 5 or more scalatests should be implemented.
+3) Logging used for all programs.
+4) Configurable input and output paths for the map/reduce programs.
+5) Compileable through 'sbt clean compile run'
+7) Deployed on AWS EMR demonstrating all the steps of deployment.
+8) Video explanation of the deployment recorded.
 
-Maintenance notes
-===
-This program is written and maintained by [Dr. Mark Grechanik](https://www.cs.uic.edu/~drmark/).
+---
 
-License
-===
-The license is Apache 2.0, see LICENSE-2.0.txt.
+## Technical Design
+
+This section will provide a detailed description of each of the classes that I implemented in this project, as well as the rationale for using one or another class when planning and developing the design of an algorithm for calculating similarities in the generated graphs:
+
+1. Main: 
+
+As the main class, I chose the Main object, implemented by Dr. Mark Grechanik. This object includes all the necessary imported libraries and modules that allow the code to work safely. The input point of this object is the 'main' function, within which random graphs are generated by randomized generation of nodes and edges. The generated graphs are saved to the directory specified in application.conf. After the generation of graphs is completed, the algorithm I wrote finds the location of the generated graphs, accesses them and sends the graph data to the ArgumentParser object, which is responsible for collecting the necessary arguments for subsequent cascading calls to the functions of this project. After receiving all the necessary arguments, including graphs in .ngs format, using the load() method, I load the graphs into the system and create two objects of type Option[NetGraph], which I subsequently use as arguments to call the processFile() method from the DataConverter object.
+
+# Sample output:
+
+_________________
+
+![NetGameSimfileName ngs perturbed](https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/bcb18003-c94f-478f-b191-bd6ad3c33cb7)
+
+_________________
 
 
+2. DataConverter:
+
+DataConverter object is responsible for converting the graphs into a human-friendly readable format, and for the subsequent sharding of the generated files for the purpose of parallel processing in Map/Reduce model. After receiving the serialized graphs as arguments, the processFile() function begins processing them simultaneously by calling the processFilesToCsv() and processEdgesToCsv() functions to access nodes and edges of the two graphs via using nodes() and edges() function calls respectively. Subsequently, shuffling of objects occurs with each other in order to create all kinds of combinations that will be used as arguments when calculating similarities via SimRank in the Map/Reduce. After generating combinations, the sharder() function is called, which splits the resulting files into shards, the size of which depends on the argument specified when calling this function. All received shards are saved in two specified folders for user convenience.
+
+# Sample output:
+
+____________________
+
+<img width="1256" alt="Screenshot 2023-10-10 at 10 16 48 AM" src="https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/6b87b301-acce-4afb-b176-e0ed531b2b27">
 
 
+____________________
+
+3. SimRankMapReduce: 
+
+The purpose of this object is to construct a Map/Reduce model, which operates exclusively on <key, value> pairs, that is, the framework views the input to the job as a set of <key, value> pairs and produces a set of <key, value> pairs as the output of the job, conceivably of different types. Inside the SimRankMapReduce object, an object of the SimRank class is created, which allows you to access methods for highlighting the similarities between two graphs and at the same time reducing the code pollution of the SimRankMapReduce object. Inside Mapper, the main method for the initial processing of received files is the map function. I use LongWritable and Text respectively as the input key and value since the CSV shard is read line by line. The output values for <key, value> pairs are Text and DoubleWritable. Inside map(), while reading a file line by line, its similarity rank is calculated via invoking calculateSimRank() function by passing each line of the processed CSV file as an argument. Thus, each line of the file is processed, followed by registration of NodeID and its similarity score for further processing. The program transfers these values to Reduce, where the final processing of the received data takes place. 
+
+Next, the reducer accepts ad outputs the following arguments [Text, DoubleWritable, Text, Text]. Inside the reducer, using the earlier generated object, I invoke calculateSimRankWithTracebilityLinks() function, and pass (key, values) as parameters. The following function calculates the number of possible traceability links between the original and perturbed nodes, F-1 score, specificity, and precision/recall ratio. The above calculations are recorded in the Text format and written to the output file, generated by a Map/Reduce Hadoop 3.3.6 model.
+
+___________________
+
+# Sample output:
+
+<img width="250" alt="Screenshot 2023-10-10 at 10 41 08 AM" src="https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/bb0ec02c-da52-4704-b1d1-f064863815fa">
 
 
-# NetGameSim_Project1
-# NetGameSim_Project1
+___________________
+
+
+4. SimRank:
+
+The following object, as mentioned earlier, is used to calculate the similarities between two graphs by analyzing the properties nodes and edges from both graphs. Using the given threshold, a similarity score is calculated, which subsequently serves as the output value in the Map and the input value in the Reducer. Based on the similarity score, as stated above, traceability links between nodes and edges are calculated.
+
+
+5. EdgesSimilarityMapReduce:
+
+This component serves the purpose of establishing a Map/Reduce model that exclusively operates on pairs of data denoted as <key, value>. Inside the EdgesSimilarityMapReduce component, an instance of the SimRank class is created. This instantiation enables us to access methods for evaluating similarities between two graphs, specifically edges, all while reducing the code complexity within the EdgesSimilarityMapReduce object.
+
+In the Mapper phase, the primary method for the initial processing of input files is the map function. LongWritable and Text are used as the input key and value types, as we process the CSV file line by line. The output values for <key, value> pairs consist of Text and DoubleWritable. Within the map() function, while processing each line of the file, we calculate its similarity rank by invoking the calculateEdgeSimRank() function with each line of the processed CSV file as an argument. As a result, each line of the file undergoes processing, accompanied by the registration of NodeID and its corresponding similarity score for subsequent steps. These values are then transmitted to the Reduce phase, where the final processing of the received data unfolds. The driver of this class is the runEdgeSimMR(inputPathE: String, outputPathE: String) method, which takes the path to the directory with shards for edges, and the output path for the produced result as the second argument.
+
+
+_______________
+
+# Sample output:
+
+<img width="197" alt="Screenshot 2023-10-10 at 10 46 20 AM" src="https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/17c0556c-b977-4310-86c0-eb75f63ac190">
+
+________________
+
+
+6. NodeSimilarity:
+
+The following object serves its primary role as a helper and the basis for implementing the methods in other objects, including SimRank.
+
+
+## Test Cases
+
+The tests can be run using 'sbt clean test' command or by directly invoking the class SimRankTest, located under the following path: src/main/Test/SimRankTest.scala
+
+In essence, the battery of tests conducted evaluates the performance and functionality of the SimRank class, alongside the sharding function, assessing their proficiency in executing tasks accurately and effectively. These tests serve as a robust validation mechanism, ensuring that both components operate seamlessly and in accordance with their intended objectives.
+
+
+## Limitations:
+
+1) For local program execution, the user needs to have Java 8 or a higher version, sbt 1.6, and Hadoop 3.3.6 installed.
+2) The program supports processing multiple files within the same input folder if the user chooses to split the files, but it cannot manage input files from different locations. 
+3) The user should possess the capability to provide Read/Write permissions to the "Users" group for the LogFileGenerator project folder. This typically requires Administrator-level access.
+4) The feature for altering the name and extension of the output file is effective only during local execution. In other words, it does not modify the name and extension in the case of program execution on AWS EMR, particularly in S3 Bucket.
+
+
+## Note for Dr. Mark Grechanik and Utsav
+
+___________
+
+The final part of this assignment requires us to compare the produced results with the results produced by Dr. Mark in the YAML file to estimate the goodness of our algorithm. Carrying out this comparison makes sense only if the algorithm is mostly free of gross errors, which minimizes the chance of obtaining an inaccurate result. In my case, the algorithm is imprecise and can sometimes be confusing or confusing when analyzing the generated data. When writing the algorithm, due to the lack of a clear understanding of how exactly to work with this kind of data, and due to lack of experience, I did not take into account a number of important factors that play a key role in determining the percentage of similarity between nodes and edges of both graphs. Taking into account all the above, I conclude that my algorithm is inaccurate and cannot be used at this stage for the purpose of accurately comparing the results obtained with the results of Dr. Mark. The implemented algorithm still needs careful refinement and additional improvements in order to increase the accuracy of calculations.
+
+To draw a conclusion, I would like to thank you for the chance to get a feel for a real example of what real programming is like that we will encounter in a real work environment. Realizing the number of hours that were invested in writing this project, and, frankly speaking, the low level of the result obtained, which cannot but upset, this allows us to take a fresh look at the approach to writing projects. This project made me realize the importance of planning the design of a future project at its earliest stages, as well as the need to ask questions even if there are even the slightest gaps in understanding what you have to work with. A lot of mistakes made when writing the project in its early stages significantly complicated the work process later, which led to the need to rewrite the code over and over again, which, in turn, gave rise to bugs in other areas of the program. Finally, I would like to note once again that the opportunity to work on tasks of this level is invaluable, and subsequently I will work on mistakes in order to prevent them when writing subsequent projects: CS 441 is notorious among students for its complexity, but at the same time it is one of the best if not the best, course at UIC to gain real world experience that will help anyone who completes it become the best version of themselves both technically and in life.
+
+Thank you for your hard work, time, patience, and understanding!
+___________
+
