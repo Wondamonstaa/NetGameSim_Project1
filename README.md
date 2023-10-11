@@ -14,7 +14,7 @@ AWS EMR Deployment YouTube link: https://youtu.be/irodxc061EQ?si=T0u2xyrtWFVqKTQ
 ## How to Run the Project:
 1) Start by downloading the project repository from Git.
 2) Navigate to the NetGameSim directory: use your terminal or command prompt to navigate to the "NetGameSim" directory within the downloaded project folder.
-3) In your terminal, run the following command to clean, compile, and execute the project: `sbt clean compile run`. The following command successfully launched the Main class of the program which contains the essential methods for successfull program execution of the written methods within other objects.
+3) In your terminal, run the following command to clean, compile, and execute the project: `sbt clean compile run`. The following command successfully launched the Main class of the program which contains the essential methods for program execution of the written methods within other objects.
 4) To run tests and ensure the code's functionality, use the following command: `sbt clean test`. All the tests on my end ran successfully among with tests written by Dr. Mark.
 5) If you need to create a .jar file for your project, execute the following command: `sbt clean assembly`. The resulting jar will be placed in __NetGameSim/target/scala-3.2.2/netmodelsim.jar__
 6) If you prefer using IntelliJ for development: a) Import the project into IntelliJ IDE. b) Build the project. c) Create a "configuration" for the Main.scala file. d) Set the configuration's arguments to be the input and output folders, separated by a space. NB: to run the project properly, a user, i.e. you, should specify the input/output paths in the application.conf file.
