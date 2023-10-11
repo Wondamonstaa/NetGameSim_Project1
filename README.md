@@ -7,7 +7,7 @@ Repo for the NetGameSim Project 1 for CS 441 Fall 2023
 
 ---
 
-AWS EMR Deployment YouTube link: EDIT
+AWS EMR Deployment YouTube link: https://youtu.be/irodxc061EQ?si=T0u2xyrtWFVqKTQY
 
 ---
 
