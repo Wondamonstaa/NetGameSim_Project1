@@ -55,7 +55,8 @@ As the main class, I chose the Main object, implemented by Dr. Mark Grechanik. T
 
 _________________
 
-![NetGameSimfileName ngs perturbed](https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/bcb18003-c94f-478f-b191-bd6ad3c33cb7)
+![WhatsApp Image 2023-09-11 at 10 02 36 PM](https://github.com/Wondamonstaa/NetGameSim_Project1/assets/113752537/208bc260-e8e5-4099-a62d-7e72a49561a1)
+
 
 _________________
 
