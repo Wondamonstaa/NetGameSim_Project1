@@ -1,0 +1,7 @@
+Student - Kiryl Baravikou
+
+Amazing job! Brilliant video and good documentation [the ReadMe feels familiar somehow, but I can't seem to put my finger on it :D ].
+Your code is well structured and you show a good understanding of map/reduce.
+Great job! keep it up!
+
+Grade = 15%
